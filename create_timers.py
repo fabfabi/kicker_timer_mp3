@@ -50,11 +50,23 @@ def create_timer(wait_time, setup_time = 8000):
     setup_pause = create_silence(setup_time - len(setup_beep))
     wait_pause = create_silence(wait_time)
 
-    play(setup_pause+ setup_beep)
-
     result = setup_pause
     result += setup_beep
     result += wait_pause
     result += signal
     return result
 
+def create_and_export(fname, wait_time, setup_time = 8000):
+    sound = create_timer(wait_time=wait_time, setup_time=setup_time)
+    sound.export(fname, format="mp3")
+    print(fname+ " exported")
+
+
+wait_times = [500, 1200, 1800, 2500, 3000, 4200, 5100, 5900, 6200, 7000, 8000, 8200, 9000, 10000]
+
+for time in wait_times:
+    fname="kicker_timer_8sec_"+str(time)+".mp3"
+
+    create_and_export(fname, time)
+
+    
