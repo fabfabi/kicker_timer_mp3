@@ -40,5 +40,21 @@ def create_setup_beep(short_beep_duration, long_beep_duration, pause,
 
     return result
 
-signal = create_double_beep(100, 25, fade_in=25, fade_out=50, frequency = 600)
-setup_beep = create_setup_beep(100, 800, 1000, frequency = 600, s_gain = -10, l_gain = 0) 
+def create_timer(wait_time, setup_time = 8000):
+    signal = create_double_beep(100, 25, fade_in=25, fade_out=50, frequency = 600)
+    setup_beep = create_setup_beep(100, 800, 1000, frequency = 600, s_gain = -10, l_gain = 0)
+
+    if len(setup_beep) > setup_time:
+        raise Exception("ERROR: setup_time is shorter than the setup-beep.")
+
+    setup_pause = create_silence(setup_time - len(setup_beep))
+    wait_pause = create_silence(wait_time)
+
+    play(setup_pause+ setup_beep)
+
+    result = setup_pause
+    result += setup_beep
+    result += wait_pause
+    result += signal
+    return result
+
